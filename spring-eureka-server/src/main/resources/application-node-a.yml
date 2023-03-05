@@ -1,0 +1,11 @@
+server:
+  port:  8761
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: false
+    service-url:
+      defaultZone: http://zolmk:zolmk@eureka-node-b:8762/eureka/,http://zolmk:zolmk@eureka-node-c:8763/eureka/
+    instance:
+      hostname: eureka-node-a
+      prefer-ip-address: false
