@@ -1,0 +1,4 @@
+FROM unitfinance/jdk17-sbt-scala
+VOLUME /tmp/tomcat
+ADD spring-eureka-server-1.0-SNAPSHOT.jar eureka-server.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/eureka-server.jar"]

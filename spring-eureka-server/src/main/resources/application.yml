@@ -1,8 +1,6 @@
 spring:
   application:
     name: eureka-server
-  profiles:
-    active: node-a
   security:
     user:
       name: zolmk

@@ -1,0 +1,29 @@
+test:
+  uri: lb://service-one
+spring:
+  application:
+    name: gateway-client
+  cloud:
+    gateway:
+      routes:
+        - id: route_service_one
+          uri: ${test.uri} # uri以lb://开头（lb代表从注册中心获取服务），后面接的就是你需要转发到的服务名称
+          predicates:
+            - Path=/user/**
+
+server:
+  port: 9100
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: DEBUG
+    org.springframework.web.reactive: DEBUG
+    reactor.ipc.netty: DEBUG
+eureka:
+  client:
+    service-url:
+      defaultZone: http://zolmk:zolmk@eureka-node-b:8762/eureka/,http://zolmk:zolmk@eureka-node-c:8763/eureka/,http://zolmk:zolmk@eureka-node-a:8761/eureka/
+  instance:
+    name: gateway-server
+    prefer-ip-address: true
