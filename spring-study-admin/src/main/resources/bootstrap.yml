@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: study-admin
+  cloud:
+    config:
+      discovery:
+        enabled: false
+        serviceId: config-server
+      name: configserver
+      profile: dev
+      label: master
+      uri: localhost:8888

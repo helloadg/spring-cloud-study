@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class GatewayServerApplication {
-    @Value("${test.uri:}")
+    @Value("${test.uri:lb://study-admin}")
     private String uri;
 
     @Bean

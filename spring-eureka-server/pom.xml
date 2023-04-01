@@ -15,6 +15,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <docker.image.prefix>zcg-${project.artifactId}</docker.image.prefix>
     </properties>
     <dependencies>
 
@@ -39,6 +40,14 @@
             <groupId>com.sun.activation</groupId>
             <artifactId>javax.activation</artifactId>
             <version>1.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -71,13 +80,15 @@
 
                 <configuration>
                     <!--指定生成的镜像名,这里是我们的作者名+项目名-->
-                    <imageName>zcg-${project.artifactId}-node-c</imageName>
+                    <imageName>zcg-${project.artifactId}</imageName>
 
                     <!--指定标签 这里指定的是镜像的版本，我们默认版本是latest-->
                     <imageTags>
                         <imageTag>latest</imageTag>
                     </imageTags>
                     <exposes>
+                        <expose>8761</expose>
+                        <expose>8762</expose>
                         <expose>8763</expose>
                     </exposes>
 
@@ -93,9 +104,12 @@
                     <!--查看我们的java版本-->
                     <cmd>["java", "-version"]</cmd>
 
-
+                    <runs>
+                        <run>chmod +x /start.sh</run>
+                    </runs>
                     <!--${project.build.finalName}.jar是打包后生成的jar包的名字-->
-                    <entryPoint>["java", "-jar","/${project.build.finalName}.jar","--spring.profiles.active=node-c"]</entryPoint>
+                    <entryPoint>["sh", "/start.sh"]</entryPoint>
+
 
                     <!--指定远程 docker api地址-->
                     <dockerHost>http://localhost:2375</dockerHost>
@@ -108,6 +122,11 @@
                             <directory>${project.build.directory}</directory>
                             <!--用于指定需要复制的文件 需要包含的 jar包 ，这里对应的是 Dockerfile中添加的文件名　-->
                             <include>${project.build.finalName}.jar</include>
+                        </resource>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.basedir}/src/main/bin</directory>
+                            <include>start.sh</include>
                         </resource>
                     </resources>
 
